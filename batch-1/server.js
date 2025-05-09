@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "Rishit@123",
+  password: "cdacacts",
   database: "student_db",
 });
 
@@ -43,6 +43,21 @@ app.post("/students", (req, res) => {
   );
 });
 
+
+// UPDATE student
+app.put("/students/:id", (req, res) => {
+  const { name, email, course } = req.body;
+  db.query(
+    "UPDATE students SET name = ?, email = ?, course = ? WHERE id = ?",
+    [name, email, course, req.params.id],
+    (err) => {
+      if (err) throw err;
+      res.send("Student updated");
+    }
+);
+});
+
+
 // Delete student
 app.delete("/students/:id", (req, res) => {
   db.query("DELETE FROM students WHERE id = ?", [req.params.id], (err) => {
@@ -50,6 +65,7 @@ app.delete("/students/:id", (req, res) => {
     res.send("Student deleted");
   });
 });
+
 
 // Start server
 app.listen(5000, () => console.log("Server running on port 5000"));
